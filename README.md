@@ -171,3 +171,4 @@ When demonstrating **Baseline Security Demo** alongside **AEGIS-AGENT**:
 - [x] Feature matrix accurately marks unimplemented capabilities ("Not implemented in this demo").
 - [x] No fabricated accuracy, speed, or false-positive claims appear ("No benchmark data yet" by default).
 - [x] Hosting configuration (`render.yaml`, `vercel.json`, `Dockerfile`) and deployment instructions included in README.
+
