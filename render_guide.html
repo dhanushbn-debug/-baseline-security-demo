@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Render Deployment Guide — Baseline Security Demo</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 10mm 12mm 10mm 12mm;
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #0f172a;
+      background: #ffffff;
+      line-height: 1.38;
+      font-size: 11px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page {
+      page-break-after: always;
+      padding-bottom: 4px;
+    }
+
+    .page:last-child {
+      page-break-after: avoid;
+    }
+
+    /* Header & Branding */
+    .header-banner {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .title-block h1 {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 2px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .title-block .subtitle {
+      font-size: 11px;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Section Headings */
+    h2 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 8px 0 5px 0;
+      padding-bottom: 2px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    h3 {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 6px 0 3px 0;
+    }
+
+    p {
+      margin: 0 0 4px 0;
+      color: #334155;
+    }
+
+    /* Code & Terminal Blocks */
+    pre, code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
+
+    code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 1px 3px;
+      border-radius: 3px;
+      font-size: 10.5px;
+      border: 1px solid #e2e8f0;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 10px;
+      overflow-x: auto;
+      margin: 4px 0 6px 0;
+      line-height: 1.35;
+    }
+
+    pre .comment { color: #94a3b8; }
+    pre .cmd { color: #38bdf8; font-weight: 600; }
+
+    /* Steps */
+    .step-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 7px 10px;
+      margin-bottom: 6px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .step-num {
+      width: 18px;
+      height: 18px;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .step-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4px 0 8px 0;
+      font-size: 10.5px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      text-align: left;
+      padding: 4px 6px;
+      border: 1px solid #e2e8f0;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 4px 6px;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #fafcff; }
+
+    /* Callout Alerts */
+    .alert {
+      border-radius: 4px;
+      padding: 6px 8px;
+      margin: 5px 0;
+      font-size: 10.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+
+    .alert-title {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-footer {
+      border-top: 1px solid #e2e8f0;
+      margin-top: 8px;
+      padding-top: 4px;
+      text-align: center;
+      font-size: 9.5px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="title-block">
+        <h1>Hosting on Render: Complete Guide</h1>
+        <div class="subtitle">Step-by-Step Instructions &bull; Part 1: Prerequisites & GitHub Push</div>
+      </div>
+      <div class="badge-doc">100% Free Tier</div>
+    </div>
+
+    <div class="alert alert-info">
+      <div class="alert-title">🎯 Goal of this Guide</div>
+      <div>Take your local <strong>Baseline Security Demo</strong> application running on your computer and make it available 24/7 on the internet with a public, secure HTTPS link (e.g. <code>https://baseline-security-demo.onrender.com</code>) using Render's free tier.</div>
+    </div>
+
+    <h2>1. What You Need Before You Start</h2>
+    <p>You only need two free accounts. No credit card or paid subscription is required:</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Service</th>
+          <th style="width: 45%;">Purpose</th>
+          <th style="width: 30%;">Where to Sign Up</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GitHub</strong></td>
+          <td>Stores your application code securely in the cloud.</td>
+          <td><a href="https://github.com">github.com</a> (Free)</td>
+        </tr>
+        <tr>
+          <td><strong>Render</strong></td>
+          <td>Hosts your Node.js application and provides a free HTTPS website.</td>
+          <td><a href="https://render.com">render.com</a> (Free, sign in with GitHub)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. How the App Works on Render (Simple Understanding)</h2>
+    <p>
+      This project was built with <strong>zero external runtime dependencies</strong>. It uses Node.js v24 core modules (<code>node:http</code>, <code>node:sqlite</code>, <code>node:fs</code>). This means:
+    </p>
+    <ul style="margin: 0 0 6px 16px; padding: 0;">
+      <li>Render doesn't need to download hundreds of heavy npm packages.</li>
+      <li>There are zero build errors, compile steps, or native C++ driver requirements.</li>
+      <li>Render deploys it in under <strong>45 seconds</strong>.</li>
+      <li>SQLite stores the database automatically inside <code>data/baseline_demo.sqlite</code>.</li>
+    </ul>
+
+    <h2>3. Step-by-Step: Uploading Your Code to GitHub</h2>
+
+    <div class="step-box">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">Create a New Repository on GitHub</div>
+      </div>
+      <p style="margin-bottom: 2px;">1. Go to <a href="https://github.com">github.com</a> and sign in.</p>
+      <p style="margin-bottom: 2px;">2. In the top right corner, click <strong>+</strong> &rarr; <strong>New repository</strong>.</p>
+      <p style="margin-bottom: 2px;">3. Name it: <code>baseline-security-demo</code> (leave it <strong>Public</strong>).</p>
+      <p style="margin-bottom: 2px;">4. <strong>Important:</strong> Do NOT check "Add a README" (your project already has all files!).</p>
+      <p style="margin-bottom: 0;">5. Click the green <strong>Create repository</strong> button.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">Push Your Files from PowerShell</div>
+      </div>
+      <p>Open <strong>PowerShell</strong> in your project folder (<code>c:\Users\HP\OneDrive\Desktop\Hackkhers</code>) and run:</p>
+      <pre><span class="comment"># 1. Link your local project to your newly created GitHub repository</span>
+<span class="cmd">git remote add origin https://github.com/&lt;YOUR-GITHUB-USERNAME&gt;/baseline-security-demo.git</span>
+
+<span class="comment"># 2. Ensure your branch is named main</span>
+<span class="cmd">git branch -M main</span>
+
+<span class="comment"># 3. Push all files to GitHub</span>
+<span class="cmd">git push -u origin main</span></pre>
+      <div class="alert alert-success" style="margin-top: 3px;">
+        ✅ When the push finishes, refresh your GitHub repository page. You will see all project files (<code>server.js</code>, <code>public/</code>, <code>render.yaml</code>, etc.) uploaded and ready!
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      Render Deployment Guide &bull; Baseline Security Demo &bull; Page 1 of 3
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="title-block">
+        <h1>Hosting on Render: Complete Guide</h1>
+        <div class="subtitle">Step-by-Step Instructions &bull; Part 2: Deploying on Render Dashboard</div>
+      </div>
+      <div class="badge-doc">Render Setup</div>
+    </div>
+
+    <h2>4. Step-by-Step: Deploying on Render (The Easiest Method)</h2>
+
+    <div class="step-box">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">Connect GitHub to Render</div>
+      </div>
+      <p>1. Open <a href="https://dashboard.render.com">dashboard.render.com</a> and sign in (choose <em>Sign in with GitHub</em>).</p>
+      <p>2. In the top right, click the blue <strong>New +</strong> button and select <strong>Web Service</strong>.</p>
+      <p>3. Select <strong>Build and deploy from a Git repository</strong> and click <strong>Next</strong>.</p>
+      <p>4. Find your <code>baseline-security-demo</code> repository in the list and click <strong>Connect</strong>.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">Fill Out Web Service Settings</div>
+      </div>
+      <p>Fill out the service creation form exactly as shown in this table:</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Field Name</th>
+            <th style="width: 35%;">What to Enter</th>
+            <th style="width: 40%;">Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Name</strong></td>
+            <td><code>baseline-security-demo</code></td>
+            <td>Sets your public URL: <code>baseline-security-demo.onrender.com</code></td>
+          </tr>
+          <tr>
+            <td><strong>Region</strong></td>
+            <td>Select closest (e.g. <em>Oregon</em> or <em>Frankfurt</em>)</td>
+            <td>Physical server datacenter.</td>
+          </tr>
+          <tr>
+            <td><strong>Branch</strong></td>
+            <td><code>main</code></td>
+            <td>The branch where your code lives.</td>
+          </tr>
+          <tr>
+            <td><strong>Root Directory</strong></td>
+            <td><em>(Leave blank)</em></td>
+            <td>Files are in root of the project.</td>
+          </tr>
+          <tr>
+            <td><strong>Runtime</strong></td>
+            <td><code>Node</code></td>
+            <td>Uses Node.js runtime environment.</td>
+          </tr>
+          <tr>
+            <td><strong>Build Command</strong></td>
+            <td><code>echo 'Ready'</code> <em>(or leave blank)</em></td>
+            <td>Zero external build steps required.</td>
+          </tr>
+          <tr>
+            <td><strong>Start Command</strong></td>
+            <td><code>node server.js</code></td>
+            <td>Starts the server and serves the dashboard.</td>
+          </tr>
+          <tr>
+            <td><strong>Instance Type</strong></td>
+            <td><strong>Free</strong> ($0 / month)</td>
+            <td>Render's 100% free hosting tier.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Under Advanced Settings:</h3>
+      <p style="margin-bottom: 2px;">Scroll down and click <strong>Advanced</strong>:</p>
+      <ul style="margin: 0 0 4px 16px; padding: 0;">
+        <li><strong>Health Check Path:</strong> Enter <code>/api/health</code> (Render tests this to confirm your app is alive).</li>
+        <li><strong>Environment Variable:</strong> Key: <code>NODE_ENV</code> &bull; Value: <code>production</code></li>
+      </ul>
+      <p style="font-weight: 700; color: #1d4ed8; margin: 4px 0;">Now click the blue "Create Web Service" button!</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">Watch the Deployment Complete</div>
+      </div>
+      <p>Render will open a live terminal. In less than 1 minute, you will see:</p>
+      <pre>==> Starting service with 'node server.js'
+================================================================
+  BASELINE SECURITY DEMO — Comparator Server
+  Fictional baseline workflow for controlled product comparison
+----------------------------------------------------------------
+  Health API:  http://0.0.0.0:10000/api/health
+  Database:    SQLite (data/baseline_demo.sqlite)
+================================================================
+==> Your service is live 🎉</pre>
+      <div class="alert alert-success" style="margin-top: 3px;">
+        🎉 Render will display your live public link at the top (e.g. <code>https://baseline-security-demo.onrender.com</code>)!
+      </div>
+    </div>
+
+    <div class="doc-footer">
+      Render Deployment Guide &bull; Baseline Security Demo &bull; Page 2 of 3
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="title-block">
+        <h1>Hosting on Render: Complete Guide</h1>
+        <div class="subtitle">Step-by-Step Instructions &bull; Part 3: Verification, Free Tier & Troubleshooting</div>
+      </div>
+      <div class="badge-doc">Testing & FAQs</div>
+    </div>
+
+    <h2>5. How to Test Your Live Website (Acceptance Checklist)</h2>
+    <p>Open your new Render public URL in any browser or phone and test these 5 features:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 6%;">#</th>
+          <th style="width: 28%;">Feature</th>
+          <th style="width: 66%;">What to Verify</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Health API</strong></td>
+          <td>Visit <code>https://&lt;app&gt;.onrender.com/api/health</code> &rarr; Returns <code>{"status":"ok", "version":"1.0.0"}</code>.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Overview Page</strong></td>
+          <td>Verify the light slate theme, KPI cards, and the 2-agent architecture pipeline diagram.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Live Scan Flow</strong></td>
+          <td>Click <strong>Run New Baseline Scan</strong> &rarr; Select <em>Sample 1: Web App API Gateway</em> &rarr; check authorization &rarr; click <strong>Start 2-Agent Scan</strong>. Watch the live 2-stage execution timeline!</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Download Reports</strong></td>
+          <td>Go to <strong>Reports</strong> tab &rarr; click <strong>HTML</strong>, <strong>JSON</strong>, and <strong>CSV</strong>. All 3 download immediately.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Comparison Lab</strong></td>
+          <td>Go to <strong>Comparison</strong> &rarr; click <strong>Load Standardized Lab Suite (N=10)</strong> &rarr; verify dynamic Precision and Recall calculations.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>6. Understanding Render's Free Tier (Important Notes)</h2>
+    
+    <div class="alert alert-warning">
+      <div class="alert-title">⏳ 1. Inactivity Sleep (Spindown)</div>
+      <div>
+        On Render Free tier, if nobody visits your website for <strong>15 minutes</strong>, Render puts the server to sleep to save power. When someone clicks your link again, it takes about <strong>30 to 45 seconds</strong> to wake up (called a "cold start"). Once awake, it runs at full speed.
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <div class="alert-title">💾 2. SQLite Database Behavior</div>
+      <div>
+        Render Free tier instances use container storage. If Render restarts your free server, the SQLite database re-initializes back to the clean demo seed data automatically. <strong>This is ideal for presentations</strong> because every demo starts with clean, predictable demo data!
+      </div>
+    </div>
+
+    <div class="alert alert-success">
+      <div class="alert-title">🔄 3. Automatic Updates on Every Git Push</div>
+      <div>
+        Whenever you make changes to your code, commit them, and run <code>git push</code>, Render automatically detects the commit and redeploys your live website without needing to touch Render!
+      </div>
+    </div>
+
+    <h2>7. Quick Troubleshooting Reference</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 32%;">Question / Issue</th>
+          <th style="width: 68%;">Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Git asks for password during push</strong></td>
+          <td>GitHub deprecated account passwords for command-line pushes. Use a GitHub <strong>Personal Access Token (classic)</strong> with <code>repo</code> scope, or push using GitHub Desktop or VS Code.</td>
+        </tr>
+        <tr>
+          <td><strong>Render says "Build Failed"</strong></td>
+          <td>Make sure <strong>Build Command</strong> is empty or <code>echo 'Ready'</code>, and <strong>Start Command</strong> is <code>node server.js</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>How do I share the demo link?</strong></td>
+          <td>Copy the URL from the top of your Render dashboard (e.g. <code>https://baseline-security-demo.onrender.com</code>). Anyone in the world can open it on desktop, tablet, or phone with zero login required.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="doc-footer">
+      Render Deployment Guide &bull; Baseline Security Demo &bull; Antigravity Engineering &bull; Page 3 of 3
+    </div>
+  </div>
+
+</body>
+</html>
