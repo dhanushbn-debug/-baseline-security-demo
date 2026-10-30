@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseline Security Demo — Controlled Comparator</title>
+  <meta name="description" content="Fictional baseline security workflow for controlled product comparison with AEGIS-AGENT">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z'/></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-inner">
+        <div class="brand-section">
+          <div class="brand-logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          </div>
+          <div>
+            <div class="brand-title">Baseline Security Demo</div>
+            <div class="brand-subtitle">Fictional baseline workflow for controlled product comparison</div>
+          </div>
+        </div>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#overview" class="nav-link active" data-route="overview">Overview</a></li>
+            <li><a href="#new-scan" class="nav-link" data-route="new-scan">New Scan</a></li>
+            <li><a href="#findings" class="nav-link" data-route="findings">Findings</a></li>
+            <li><a href="#reports" class="nav-link" data-route="reports">Reports</a></li>
+            <li><a href="#comparison" class="nav-link" data-route="comparison">Comparison</a></li>
+            <li><a href="#about" class="nav-link" data-route="about">About this Demo</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Transparency & Disclaimer Sub-Banner -->
+    <div class="disclaimer-banner">
+      <div class="disclaimer-content">
+        <div>
+          <span class="disclaimer-tag">Fictional Comparator</span>
+          <span>Deliberately limited 2-agent workflow (Scanner Agent &bull; Report Agent) &bull; No autonomous exploit verification or code patches.</span>
+        </div>
+        <div style="font-size: 11px; font-weight: 600; color: #a16207;">
+          FOR CONTROLLED DEMO USE ONLY
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Mount Area -->
+    <main class="main-wrapper" id="app-content">
+      <div style="text-align: center; padding: 48px; color: var(--text-muted);">
+        Loading Baseline Security Demo...
+      </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end;"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <strong>Baseline Security Demo</strong> &bull; Intentionally limited comparator for transparent AEGIS-AGENT demonstrations.
+      </div>
+      <div style="margin-top: 6px; color: var(--text-subtle); font-size: 11px;">
+        Fictional benchmark comparator &bull; Educational sample fixtures only &bull; Built with native Node.js &amp; SQLite.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Client Application Loader -->
+  <script type="module">
+    import { initApp } from '/js/app.js';
+    initApp();
+  </script>
+</body>
+</html>

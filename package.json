@@ -1,0 +1,21 @@
+{
+  "name": "baseline-security-demo",
+  "version": "1.0.0",
+  "description": "Fictional baseline workflow for controlled product comparison with AEGIS-AGENT",
+  "private": true,
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test test/api.test.js"
+  },
+  "keywords": [
+    "security-demo",
+    "baseline-comparator",
+    "two-agent-workflow",
+    "aegis-agent"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "MIT"
+}

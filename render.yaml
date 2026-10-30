@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: baseline-security-demo
+    env: node
+    plan: free
+    buildCommand: "echo 'No build step required for native Node.js'"
+    startCommand: "node server.js"
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    disk:
+      name: baseline-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
