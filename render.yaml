@@ -11,7 +11,11 @@ services:
         value: production
       - key: PORT
         value: 10000
-    disk:
-      name: baseline-data
-      mountPath: /opt/render/project/src/data
-      sizeGB: 1
+    # Note: Render Free Tier instances run SQLite in ephemeral storage (resets to demo seed on redeploy).
+    # To attach a persistent disk on Render, upgrade plan to 'starter' and uncomment the block below:
+    # plan: starter
+    # disk:
+    #   name: baseline-data
+    #   mountPath: /opt/render/project/src/data
+    #   sizeGB: 1
+
